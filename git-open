@@ -246,6 +246,17 @@ elif [[ "$domain" =~ amazonaws\.com$ ]]; then
   # Replace branch ref.
   # Ex. /tree/foobar -> foobar/--/
   providerBranchRef="${providerBranchRef##*/}/--/"
+
+elif [[ "$domain" =~ "gerrit" ]]; then
+  if [[ "$branch" =~ "review" ]]; then
+    # Split on first '/ to get change id
+    changeid=${branch##*/}
+    urlpath="c/$urlpath/+/"
+    providerBranchRef=$changeid    
+  else
+    urlpath="plugins/gitiles/$urlpath"    
+    providerBranchRef="/+/refs/heads/$branch"
+  fi
 fi
 
 openurl="$protocol://$domain/$urlpath"
